@@ -19,21 +19,18 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    int fr1D, fr1N, fr2D, fr2N, resultD, resultN, gcd;
+    int a, b, c, d, denominator, numerator, gcd;
 
-    cin >> fr1N >> fr1D;
-    cin >> fr2N >> fr2D;
+    cin >> a >> b;
+    cin >> c >> d;
 
-    //최소공배수(분모)
-    resultD = fr1D * fr2D / Gcd(fr1D, fr2D);
-
-    //합(분자)
-    resultN = resultD / fr1D * fr1N + resultD / fr2D * fr2N;
+    numerator = (b * c) + (a * d);
+    denominator = b * d;
 
     //최대공약수
-    gcd = Gcd(resultD, resultN);
+    gcd = Gcd(numerator, denominator);
 
-    cout << resultN / gcd << " " << resultD / gcd;
+    cout << numerator / gcd << " " << denominator / gcd;
 
     return 0;
 }

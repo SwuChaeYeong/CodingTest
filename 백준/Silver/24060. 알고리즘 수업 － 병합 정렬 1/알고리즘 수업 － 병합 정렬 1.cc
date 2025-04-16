@@ -1,5 +1,4 @@
 #include <iostream>
-#define fastio ios::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 using namespace std;
 
 void merge_sort(int* A, int start, int end, int K);
@@ -7,7 +6,9 @@ void merge(int* A, int p, int q, int r, int K);
 int inputcnt = 0;
 
 int main(){
-    fastio;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(0);
+    
     int N, K;
     cin >> N >> K;
     int* A;

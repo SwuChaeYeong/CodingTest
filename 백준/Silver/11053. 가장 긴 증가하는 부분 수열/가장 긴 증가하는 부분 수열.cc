@@ -11,7 +11,7 @@ int main() {
     int n;
     cin >> n;
 
-    vector<int> dp(n, 1);
+    vector<int> v;
     vector<int> input(n);
 
     for (int i = 0; i < n; i++)
@@ -19,17 +19,19 @@ int main() {
         cin >> input[i];
     }
 
-    for (int i = 1; i < n; i++)
+    // 증가
+    for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j < i; j++)
-        {
-            if (input[j] < input[i])
-                dp[i] = max(dp[i], dp[j] + 1);
-        }
+        auto it = lower_bound(v.begin(), v.end(), input[i]);
+
+        if (it == v.end())
+            v.push_back(input[i]);
+        else
+            *it = input[i];
     }
 
-    int result = *max_element(dp.begin(), dp.end());
-    cout << result;
+    cout << v.size();
+
 
     return 0;
 }

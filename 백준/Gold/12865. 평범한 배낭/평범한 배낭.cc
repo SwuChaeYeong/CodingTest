@@ -11,29 +11,20 @@ int main() {
     int n, k;
     cin >> n >> k;
 
-    vector<int> w(n + 1);
-    vector<int> v(n + 1);
-    vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));
+    vector<int> w(n);
+    vector<int> v(n);
+    vector<int> dp(k + 1, 0);
 
-    for (int i = 1; i <= n; i++)
+    for (int i = 0; i < n; i++)
         cin >> w[i] >> v[i];
 
-    for (int i = 1; i <= n; i++)
+    for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j <= k; j++)
-        {
-            if (w[i] <= j)
-            {
-                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - w[i]] + v[i]);
-            }
-            else
-            {
-                dp[i][j] = dp[i - 1][j];
-            }
-        }
+        for (int j = k; j >= w[i]; j--)
+            dp[j] = max(dp[j], dp[j - w[i]] + v[i]);
     }
 
-    cout << dp[n][k];
+    cout << dp[k];
 
     return 0;
 }

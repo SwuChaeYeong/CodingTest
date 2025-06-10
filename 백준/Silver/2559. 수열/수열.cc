@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
@@ -13,7 +12,7 @@ int main() {
 
     vector<int> input(n);
     vector<int> psum(n + 1, 0);
-    vector<int> result;
+    int result = -1e9;
 
     for (int i = 0; i < n; i++)
         cin >> input[i];
@@ -25,11 +24,13 @@ int main() {
 
     for (int i = 0; i <= n - m; i++)
     {
-        result.push_back(psum[i + m] - psum[i]);
+        int temp = psum[i + m] - psum[i];
+
+        if (temp > result)
+            result = temp;
     }
 
-    int output = *max_element(result.begin(), result.end());
-    cout << output;
+    cout << result;
 
     return 0;
 }

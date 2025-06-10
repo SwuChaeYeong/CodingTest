@@ -11,26 +11,24 @@ int main() {
     cin >> n >> m;
 
     vector<int> input(n);
-    vector<int> psum(n + 1, 0);
-    int result = -1e9;
 
     for (int i = 0; i < n; i++)
         cin >> input[i];
 
-    for (int i = 1; i <= n; i++)
+    int windowSum = 0;
+    for (int i = 0; i < m; i++)
+        windowSum += input[i];
+
+    int maxSum = windowSum;
+
+    for (int i = m; i < n; i++)
     {
-        psum[i] = psum[i - 1] + input[i - 1];
+        windowSum += input[i] - input[i - m];
+        if (windowSum > maxSum)
+            maxSum = windowSum;
     }
 
-    for (int i = 0; i <= n - m; i++)
-    {
-        int temp = psum[i + m] - psum[i];
-
-        if (temp > result)
-            result = temp;
-    }
-
-    cout << result;
+    cout << maxSum;
 
     return 0;
 }

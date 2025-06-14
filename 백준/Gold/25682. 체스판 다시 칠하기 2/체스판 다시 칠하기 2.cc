@@ -19,7 +19,6 @@ int main() {
     }
 
     vector<vector<int>> diffW(n + 1, vector<int>(m + 1, 0));
-    vector<vector<int>> diffB(n + 1, vector<int>(m + 1, 0));
 
     for (int i = 1; i <= n; i++)
     {

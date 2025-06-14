@@ -1,72 +1,70 @@
 #include <iostream>
-#include <string>
-
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-int main()
-{
-    string arr[50];
-    int row, column, count = 65;
+int main() {
 
-    cin >> row >> column;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(0);
 
-    for (int i = 0; i < row; i++)
+    int n, m, size = 8;
+    cin >> n >> m;
+
+    vector<string> board(n);
+
+    for (int i = 0; i < n; i++)
     {
-        cin >> arr[i];
+        cin >> board[i];
     }
 
-    int temp1, temp2;
+    int temp1 = 0, temp2 = 0;
+    int cnt = 65;
 
-    for (int x = 0; x < row - 7; x++)
+    for (int i = 0; i <= n - size; i++)
     {
-        for (int y = 0; y < column - 7; y++)
+        for (int j = 0; j <= m - size; j++)
         {
-            //첫째 칸이 W인 경우
-            for (int i = x; i < x + 8; i++)
+            for (int x = i; x < i + 8; x++)
             {
-                for (int j = y; j < y + 8; j++)
+                for (int y = j; y < j + 8; y++)
                 {
-                    if ((i - x + j - y) % 2 == 0)
+                    if ((x - i + y - j) % 2 == 0)
                     {
-                        if (arr[i][j] != 'W')
+                        if (board[x][y] != 'W')
                             temp1++;
                     }
                     else
                     {
-                        if (arr[i][j] != 'B')
+                        if (board[x][y] != 'B')
                             temp1++;
                     }
                 }
             }
 
-            //첫째 칸이 B인 경우
-            for (int i = x; i < x + 8; i++)
+            for (int x = i; x < i + 8; x++)
             {
-                for (int j = y; j < y + 8; j++)
+                for (int y = j; y < j + 8; y++)
                 {
-                    if ((i - x + j - y) % 2 == 0)
+                    if ((x - i + y - j) % 2 == 0)
                     {
-                        if (arr[i][j] != 'B')
+                        if (board[x][y] != 'B')
                             temp2++;
                     }
                     else
                     {
-                        if (arr[i][j] != 'W')
+                        if (board[x][y] != 'W')
                             temp2++;
                     }
                 }
             }
 
-            int temp = temp1 < temp2 ? temp1 : temp2;
-            if (temp < count)
-                count = temp;
-
-            temp1 = 0;
-            temp2 = 0;
+            cnt = min({ cnt, temp1, temp2 });
+            temp1 = 0, temp2 = 0;
         }
     }
-    
-    cout << count;
+
+    cout << cnt;
 
     return 0;
 }

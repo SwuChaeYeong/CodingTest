@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 using namespace std;
 
@@ -11,20 +10,22 @@ int main() {
     int n;
     cin >> n;
 
-    vector<int> dp(n);
-    vector<int> input(n);
+    int currentSum, maxSum;
+    cin >> currentSum;
 
-    for (int i = 0; i < n; i++)
-        cin >> input[i];
+    maxSum = currentSum;
 
-    dp[0] = input[0];
-
-    for (int i = 1; i < n; i++)
+    for (int i = 0; i < n - 1; i++)
     {
-        dp[i] = max(dp[i - 1] + input[i], input[i]);
+        int temp;
+        cin >> temp;
+
+        // 새로 연속합을 시작할지 계속 이어갈지
+        currentSum = max(temp, currentSum + temp);
+        maxSum = max(maxSum, currentSum);
     }
 
-    cout << *max_element(dp.begin(), dp.end());
+    cout << maxSum;
 
     return 0;
 }

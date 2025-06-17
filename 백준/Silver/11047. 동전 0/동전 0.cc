@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
 using namespace std;
 
@@ -22,13 +21,10 @@ int main() {
 
     for (int i = N - 1; i >= 0; i--)
     {
-        if (K == 0)
-            break;
-
-        while (input[i] <= K)
+        if (input[i] <= K)
         {
-            K -= input[i];
-            result++;
+            result += K / input[i];
+            K %= input[i];
         }
     }
 

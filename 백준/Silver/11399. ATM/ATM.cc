@@ -12,7 +12,6 @@ int main() {
     cin >> N;
 
     vector<int> t(N);
-
     for (int i = 0; i < N; i++)
     {
         cin >> t[i];
@@ -20,11 +19,11 @@ int main() {
 
     sort(t.begin(), t.end());
 
-    int result = t[0];
-    for (int i = 1; i < N; i++)
+    int result = 0, sum = 0;
+    for (int i = 0; i < N; i++)
     {
-        t[i] += t[i - 1];
-        result += t[i];
+        sum += t[i];
+        result += sum;
     }
 
     cout << result;

@@ -20,14 +20,16 @@ int main() {
     for (int i = 0; i < N; i++)
         cin >> oil[i];
 
-    int result = 0;
-    int price = oil[0];
+    long long result = 0;
+    long long price = oil[0];
+
     for (int i = 0; i < N - 1; i++)
     {
-        if (price > oil[i])
-            price = oil[i];
-
         result += price * city[i];
+
+        if (price > oil[i + 1])
+            price = oil[i + 1];
+
     }
 
     cout << result;

@@ -27,7 +27,7 @@ int main() {
 
     cin >> A >> B >> C;
 
-    cout << mul(A, B) % C;
+    cout << mul(A, B);
 
     return 0;
 }

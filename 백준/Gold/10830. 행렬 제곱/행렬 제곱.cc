@@ -9,7 +9,7 @@ int N;
 // 행렬 곱셈
 Matrix mul(const Matrix& A, const Matrix& B)
 {
-    Matrix result(N, vector<int>(N, 0));
+    Matrix result(N, vector<int>(N));
 
     for (int i = 0; i < N; i++)
     {

@@ -2,14 +2,18 @@
 #include <vector>
 using namespace std;
 
-using Matrix = vector<vector<long long>>;
 const int MOD = 1000000007;
 long long N;
+
+struct Matrix
+{
+    long long m[2][2];
+};
 
 // 행렬 곱셈
 Matrix mul(const Matrix& A, const Matrix& B)
 {
-    Matrix result(2, vector<long long>(2));
+    Matrix result = { 0 };
 
     for (int i = 0; i < 2; i++)
     {
@@ -18,9 +22,8 @@ Matrix mul(const Matrix& A, const Matrix& B)
             // 연산 횟수는 2번 만큼
             for (int k = 0; k < 2; k++)
             {
-                result[i][j] += (A[i][k] * B[k][j]) % MOD;
+                result.m[i][j] = (result.m[i][j] + A.m[i][k] * B.m[k][j] % MOD) % MOD;
             }
-            result[i][j] %= MOD;
         }
     }
 
@@ -31,9 +34,7 @@ Matrix mul(const Matrix& A, const Matrix& B)
 Matrix pow(Matrix A, long long b)
 {
     // 단위 행렬 초기화
-    Matrix result(2, vector<long long>(2, 0));
-    for (int i = 0; i < 2; i++)
-        result[i][i] = 1;
+    Matrix result = { 1,0,0,1 };
 
     // b가 0보다 클동안
     while (b > 0)
@@ -55,16 +56,18 @@ int main() {
     // N 입력
     cin >> N;
 
+    if (N == 1 || N == 2)
+    {
+        cout << 1;
+        return 0;
+    }
+
     // 행렬 입력
-    Matrix A(2, vector<long long>(2));
-    A[0][0] = 1;
-    A[0][1] = 1;
-    A[1][0] = 1;
-    A[1][1] = 0;
+    Matrix A = { 1,1,1,0 };
 
     Matrix answer = pow(A, N - 1);
 
-    cout << answer[0][0];
+    cout << answer.m[0][0];
 
     return 0;
 }

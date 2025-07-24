@@ -5,9 +5,9 @@
 using namespace std;
 
 // 각 정점 인접 리스트
-vector<int> graph[100001];
+vector<int> graph[101];
 // 각 정점 방문 순서 저장
-bool visited[100001];
+bool visited[101];
 int cnt = 0;
 
 void dfs(int node)

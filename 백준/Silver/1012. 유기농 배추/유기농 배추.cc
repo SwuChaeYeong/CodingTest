@@ -18,39 +18,24 @@ int houseCount = 0;
 int dx[4] = { -1,1,0,0 };
 int dy[4] = { 0,0,-1,1 };
 
-void BFS(int x, int y)
+void DFS(int x, int y)
 {
     // 방문 처리
     visited[x][y] = true;
 
-    // 큐 (x, y 저장해야 하므로 pair 사용)
-    queue<pair<int, int>> q;
-    q.push({ x, y });
-
-
-    while (!q.empty())
+    for (int dir = 0; dir < 4; dir++)
     {
-        // 큐에서 pop
-        int cx = q.front().first;
-        int cy = q.front().second;
-        q.pop();
+        int nx = x + dx[dir];
+        int ny = y + dy[dir];
 
-        // 현재 꺼낸 노드 상하좌우 탐색
-        for (int dir = 0; dir < 4; dir++)
+        // 맵 범위를 벗어나지 않는지 체크
+        if (nx >= 0 && nx < N && ny >= 0 && ny < M)
         {
-            int nx = cx + dx[dir];
-            int ny = cy + dy[dir];
-
-            // 맵 범위를 벗어나지 않는지 체크
-            if (nx >= 0 && nx < N && ny >= 0 && ny < M)
+            // 집이 있고, 방문하지 않은 경우
+            if (map[nx][ny] == 1 && !visited[nx][ny])
             {
-                // 집이 있고, 방문하지 않은 경우
-                if (map[nx][ny] == 1 && !visited[nx][ny])
-                {
-                    // 방문 처리
-                    visited[nx][ny] = true;
-                    q.push({ nx, ny });
-                }
+                // 방문 처리
+                DFS(nx, ny);
             }
         }
     }
@@ -74,6 +59,7 @@ int main()
         memset(map, 0, sizeof(map));
         houseCount = 0;
 
+        // 배추 위치 저장
         for (int i = 0; i < K; i++)
         {
             int x, y;
@@ -82,6 +68,7 @@ int main()
             map[y][x] = 1;
         }
 
+        // BFS 또는 DFS
         for (int i = 0; i < N; i++)
         {
             for (int j = 0; j < M; j++)
@@ -90,7 +77,7 @@ int main()
                 if (map[i][j] == 1 && !visited[i][j])
                 {
                     houseCount++;
-                    BFS(i, j);
+                    DFS(i, j);
                 }
             }
         }

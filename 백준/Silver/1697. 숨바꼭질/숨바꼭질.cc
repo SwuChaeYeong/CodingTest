@@ -8,9 +8,6 @@ int N, K;
 
 const int MAX = 100001;
 
-// 맵 입력
-vector<string> map;
-
 // 각 정점 방문 순서 저장
 bool visited[MAX];
 // 각 정점에 도달했을 때 거리

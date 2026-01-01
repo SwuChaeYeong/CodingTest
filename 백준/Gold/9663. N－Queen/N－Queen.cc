@@ -1,50 +1,51 @@
 #include <iostream>
 #include <cmath>
+
 using namespace std;
 
-int n;
-int visit[15] = { 0, };
+int N;
+int visit[16] = { 0, };
 int result = 0;
 
-
-bool isPossible(int num)
+// 대각선 계산 후 배치 가능 여부 반환
+bool isPossible(int n)
 {
-    for (int i = 0; i < num; i++)
+    for (int i = 0; i < n; i++)
     {
-        if (visit[num] == visit[i] || abs(num - i) == abs(visit[num] - visit[i]))
+        if (visit[n] == visit[i] || abs(n - i) == abs(visit[n] - visit[i]))
             return false;
     }
 
     return true;
 }
 
-void Queen(int idx)
+void queen(int idx)
 {
-    if (idx == n)
+    if (idx == N)
     {
         result++;
         return;
     }
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < N; i++)
     {
         visit[idx] = i;
 
         if (isPossible(idx))
         {
-            Queen(idx + 1);
+            queen(idx + 1);
         }
     }
 }
 
-int main() {
-
+int main()
+{
     ios_base::sync_with_stdio(false);
     cin.tie(NULL); cout.tie(0);
 
-    cin >> n;
+    cin >> N;
 
-    Queen(0);
+    queen(0);
 
     cout << result;
 

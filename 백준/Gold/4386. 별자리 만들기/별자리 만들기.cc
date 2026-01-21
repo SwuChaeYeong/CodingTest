@@ -3,36 +3,9 @@
 #include <cmath>
 #include <algorithm>
 #include <cstdio>
+#include <queue>
 
 using namespace std;
-
-struct Edge {
-    int u, v;
-    double cost;
-};
-
-int parent[101];
-
-int findP (int x)
-{
-    if (parent[x] == x)
-        return x;
-
-    return parent[x] = findP(parent[x]);
-}
-
-bool unite(int a, int b)
-{
-    a = findP(a);
-    b = findP(b);
-
-    // 같은 집합
-    if (a == b)
-        return false;
-
-    parent[b] = a;
-    return true;
-}
 
 int main()
 {
@@ -49,44 +22,47 @@ int main()
         cin >> star[i].first >> star[i].second;
     }
 
-    vector<Edge> edges;
+    vector<bool> visited(N, false);
 
-    // 모든 별 쌍 간선 생성
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 1 + i; j < N; j++)
-        {
-            double dx = star[i].first - star[j].first;
-            double dy = star[i].second - star[j].second;
-            double dist = sqrt(dx * dx + dy * dy);
-            edges.push_back({ i, j, dist });
-        }
-    }
+    // 비용, 정점
+    priority_queue<pair<double, int>, vector<pair<double, int>>, greater<pair<double, int>>> pq;
 
-    // 부모 초기화
-    for (int i = 0; i < N; i++)
-    {
-        parent[i] = i;
-    }
-
-    //// 크루스칼
-    // 가준치 기준 정렬
-    sort(edges.begin(), edges.end(), [](Edge a, Edge b) {
-        return a.cost < b.cost;
-        });
+    // 시작점
+    pq.push({ 0.0, 0 });
 
     double result = 0.0;
     int cnt = 0;
 
-    for (int i = 0; i < edges.size(); i++)
+    while (!pq.empty())
     {
-        if (unite(edges[i].u, edges[i].v))
-        {
-            result += edges[i].cost;
-            cnt++;
+        double cost = pq.top().first;
+        int now = pq.top().second;
+        pq.pop();
 
-            if (cnt == N - 1)
-                break;
+        // 방문한 경우 패스
+        if (visited[now])
+            continue;
+
+        // 방문 처리
+        visited[now] = true;
+        result += cost;
+        cnt++;
+
+        // 전부 방문할 경우 종료
+        if (cnt == N)
+            break;
+
+        // 현재 정점에서 갈 수 있는 모든 정점
+        for (int next = 0; next < N; next++)
+        {
+            if (!visited[next])
+            {
+                double dx = star[now].first - star[next].first;
+                double dy = star[now].second - star[next].second;
+                double dist = sqrt(dx * dx + dy * dy);
+
+                pq.push({ dist, next });
+            }
         }
     }
 

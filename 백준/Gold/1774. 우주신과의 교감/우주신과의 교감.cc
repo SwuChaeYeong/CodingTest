@@ -6,14 +6,13 @@
 
 using namespace std;
 
-struct Edge {
-    int u, v;
-    double cost;
-};
-
+int N, M;
 int parent[1001];
+pair<int, int> pos[1001];
+bool visited[1001];
+double minDist[1001];
 
-int findP (int x)
+int findP(int x)
 {
     if (parent[x] == x)
         return x;
@@ -21,17 +20,22 @@ int findP (int x)
     return parent[x] = findP(parent[x]);
 }
 
-bool unite(int a, int b)
+void unite(int a, int b)
 {
     a = findP(a);
     b = findP(b);
 
-    // 같은 집합
-    if (a == b)
-        return false;
+    // 같은 집합이 아니면
+    if (a != b)
+        parent[b] = a;
+}
 
-    parent[b] = a;
-    return true;
+// 거리
+double distance(int a, int b)
+{
+    double dx = pos[a].first - pos[b].first;
+    double dy = pos[a].second - pos[b].second;
+    return sqrt(dx * dx + dy * dy);
 }
 
 int main()
@@ -39,17 +43,15 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL); cout.tie(0);
 
-    int N, M;
     cin >> N >> M;
-
-    vector<pair<int, int>> pos(N + 1);
 
     for (int i = 1; i <= N; i++)
     {
         cin >> pos[i].first >> pos[i].second;
 
-        // 부모 초기화
+        // 초기화
         parent[i] = i;
+        minDist[i] = 1e18;
     }
 
     // 이미 연결된 통로
@@ -61,32 +63,52 @@ int main()
     }
 
 
-    // 모든 간선 생성
-    vector<Edge> edges;
+    // 1번 우주신을 시작점으로 설정
+    int start = 1;
     for (int i = 1; i <= N; i++)
     {
-        for (int j = 1 + i; j <= N; j++)
+        if (findP(i) == findP(start))
         {
-            double dx = pos[i].first - pos[j].first;
-            double dy = pos[i].second - pos[j].second;
-            double dist = sqrt(dx * dx + dy * dy);
-            edges.push_back({ i, j, dist });
+            minDist[i] = 0;
         }
     }
 
-    //// 크루스칼
-    // 가준치 기준 정렬
-    sort(edges.begin(), edges.end(), [](Edge a, Edge b) {
-        return a.cost < b.cost;
-        });
-
     double answer = 0.0;
 
-    for (int i = 0; i < edges.size(); i++)
+    for (int i = 0; i < N; i++)
     {
-        if (unite(edges[i].u, edges[i].v))
+        int cur = -1;
+        double best = 1e18;
+
+        // 아직 방문 안 한 정점 중 최소 비용
+        for (int j = 1; j <= N; j++)
         {
-            answer += edges[i].cost;
+            if (!visited[j] && minDist[j] < best)
+            {
+                best = minDist[j];
+                cur = j;
+            }
+        }
+
+        // 방문 처리
+        visited[cur] = true;
+        answer += best;
+
+        // 거리 갱신
+        for (int next = 1; next <= N; next++)
+        {
+            if (!visited[next])
+            {
+                double d;
+                
+                if (findP(cur) == findP(next))
+                    d = 0.0;
+
+                else
+                    d = distance(cur, next);
+
+                minDist[next] = min(minDist[next], d);
+            }
         }
     }
 

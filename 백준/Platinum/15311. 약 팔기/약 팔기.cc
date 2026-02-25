@@ -1,12 +1,14 @@
-#include <bits/stdc++.h>
+#include <iostream>
+
 using namespace std;
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(0);
 
     int N;
-    cin >> N; // 입력은 주어지지만 사실 항상 1,000,000
+    cin >> N;
 
     cout << 2000 << "\n";
 

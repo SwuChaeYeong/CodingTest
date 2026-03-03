@@ -59,7 +59,6 @@ int main()
     int x, y;
     cin >> x >> y;
 
-    // 🔥 진짜 핵심 변환
     int hole_r = N - y;
     int hole_c = x - 1;
 

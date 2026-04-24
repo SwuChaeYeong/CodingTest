@@ -24,17 +24,21 @@ vector<int> solution(vector<string> genres, vector<int> plays) {
     });
     
     // 장르별 노래 선택
-    for (auto &g : sortedGenres) {
+    for (auto &g : sortedGenres) 
+    {
         auto &songs = genreSongs[g.first];
         
         sort(songs.begin(), songs.end(), [](auto &a, auto &b) {
+            
             if (a.first == b.first)
-                return a.second < b.second; // 인덱스 작은 거 먼저
-            return a.first > b.first;     // 재생수 큰 거 먼저
+                return a.second < b.second; // 재생수가 같은 경우 작은 인덱스
+            
+            return a.first > b.first;     // 재생수대로 정렬하되,
         });
         
         // 최대 2개 선택
-        for (int i = 0; i < songs.size() && i < 2; i++) {
+        for (int i = 0; i < songs.size() && i < 2; i++) 
+        {
             answer.push_back(songs[i].second);
         }
     }

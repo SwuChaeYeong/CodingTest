@@ -1,84 +1,87 @@
 #include <string>
 #include <vector>
 #include <deque>
+#include <climits>
 
 using namespace std;
 
 vector<int> solution(int m, int n, int h, int w, vector<vector<int>> drops) {
     
-    //1단계 drops를 2차원 배열에 찍기 : O(m*n) (=drops.size())
+    int total = m * n;
+    vector<int> rain(total, INT_MAX);
     
-    vector<vector<int>> board(m, vector<int>(n, 1e9));
-    for(int i=0;i<drops.size(); ++i){
-        int x = drops[i][0];
-        int y = drops[i][1];
-        board[x][y] = i+1;
+    // 2차원 배열을 1차원 배열로
+    for (int i = 0; i < drops.size(); i++)
+    {
+        int r = drops[i][0];
+        int c = drops[i][1];
+        
+        // 비 오는 순서를 저장
+        rain[r * n + c] = i + 1;
     }
     
-    //2단계 row (가로) 압축 O(M * N)
-    vector<vector<int>> row_compression(m);
+    int newN = n - w + 1;
+    vector<int> rowMin(m * newN);
     
-    for(int i=0; i<m; ++i){
-        deque<int> deq;
-        for(int j=0; j<n; ++j){
-            if(j< w-1){
-                while(!deq.empty()&&board[i][deq.back()]>= board[i][j]){
-                    deq.pop_back();
-                }
-                deq.push_back(j);
-            }else{
-                if(!deq.empty()&& deq.front() <= j-w) deq.pop_front();
-                while(!deq.empty()&&board[i][deq.back()]>=board[i][j]){
-                    deq.pop_back();
-                }
-                deq.push_back(j);
-                row_compression[i].push_back(board[i][deq.front()]);
+    for (int r = 0; r < m; r++)
+    {
+        deque<int> dq;
+        
+        for (int c = 0; c < n; c++)
+        {
+            while (!dq.empty() && rain[r * n + dq.back()] >= rain[r * n + c])
+            {
+                dq.pop_back();
             }
-        }
-    }
-    
-    
-    //3단계 column 방향으로 압축 O(M*N)
-    vector<vector<int>> col_compression(m - h + 1, vector<int>(n - w + 1));
-
-    // 열(Column)의 개수는 n - w + 1 개!
-    for(int i = 0; i < n - w + 1; ++i) { 
-        deque<int> deq;
-        for(int j = 0; j < m; ++j) {
-            if(j < h - 1) {
-                // 원본 board가 아니라, 2단계 결과물인 row_compression 참조!
-                while(!deq.empty() && row_compression[deq.back()][i] >= row_compression[j][i]) {
-                    deq.pop_back();
-                }
-                deq.push_back(j);
-            } else {
-                if(!deq.empty() && deq.front() <= j - h) deq.pop_front();
             
-                // 여기서도 row_compression 참조!
-                while(!deq.empty() && row_compression[deq.back()][i] >= row_compression[j][i]) {
-                    deq.pop_back();
-                }
-                deq.push_back(j);
+            dq.push_back(c);
             
-                // j는 윈도우의 끝 인덱스이므로, 저장할 때는 j - h + 1 로 인덱싱 매핑
-                col_compression[j - h + 1][i] = row_compression[deq.front()][i];
+            if (dq.front() <= c - w)
+                dq.pop_front();
+            
+            if (c >= w - 1)
+            {
+                rowMin[r * newN + (c - w + 1)] = rain[r * n + dq.front()];
             }
         }
     }
     
-    int max_val = 0;
-    int max_r = 0;
-    int max_c = 0;
+    int newM = m - h + 1;
     
-    for(int i=0; i<col_compression.size();++i){
-        for(int j=0; j<col_compression[0].size();++j){
-            if(col_compression[i][j]==0) return {i,j};
-            if(max_val < col_compression[i][j]) {
-                max_val = col_compression[i][j];
-                max_r = i;
-                max_c = j;
+    int bestTime = -1;
+    int bestR = 0;
+    int bestC = 0;
+    
+    for (int c = 0; c < newN; c++)
+    {
+        deque<int> dq;
+        
+        for (int r = 0; r < m; r++)
+        {
+            int val = rowMin[r * newN + c];
+            
+            while (!dq.empty() && rowMin[dq.back() * newN + c] >= val)
+                dq.pop_back();
+            
+            dq.push_back(r);
+            
+            if (dq.front() <= r - h)
+                dq.pop_front();
+            
+            if (r >= h - 1)
+            {
+                int cur = rowMin[dq.front() * newN + c];
+                int sr = r - h + 1;
+                
+                if (cur > bestTime || (cur == bestTime && (sr < bestR || (sr == bestR && c < bestC))))
+                    {
+                        bestTime = cur;
+                        bestR = sr;
+                        bestC = c;
+                    }
             }
         }
     }
-    return {max_r, max_c};
+    
+    return {bestR, bestC};
 }
